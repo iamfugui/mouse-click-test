@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鼠标点击测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #output {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 400px; /* 调整输出框宽度 */
+        }
+    </style>
+</head>
+<body>
+
+<h1>鼠标点击测试</h1>
+<p>请点击下面的区域，观看记录:</p>
+<div id="clickable-area" style="width: 300px; height: 200px; border: 1px solid #000;">
+    点击这里
+</div>
+
+<div id="output">点击记录:</div>
+
+<script>
+    const clickableArea = document.getElementById('clickable-area');
+    const output = document.getElementById('output');
+
+    let lastClickTime = 0;
+    let lastClickPosition = { x: 0, y: 0 };
+    const threshold = 100; // 设置阈值为 300 毫秒
+
+    clickableArea.addEventListener('click', (event) => {
+        const currentTime = Date.now();
+        const currentPosition = { x: event.clientX, y: event.clientY };
+
+        // 检测时间间隔和位置
+        if (currentTime - lastClickTime < threshold ) {
+            alert('警告：检测到异常点击！');
+        }
+
+        let timeInterval = lastClickTime ? currentTime - lastClickTime : 0; // 计算间隔时间
+        output.innerHTML += `<p>左键点击 - X: ${event.clientX}, Y: ${event.clientY}, 间隔: ${timeInterval} 毫秒</p>`;
+        
+        lastClickTime = currentTime;
+        lastClickPosition = currentPosition;
+    });
+
+    clickableArea.addEventListener('contextmenu', (event) => {
+        // 记录右键点击并屏蔽右键菜单
+        event.preventDefault();
+        const currentTime = Date.now();
+        const currentPosition = { x: event.clientX, y: event.clientY };
+
+        // 检测时间间隔和位置
+        if (currentTime - lastClickTime < threshold ) {
+            alert('警告：检测到异常右键点击！');
+        }
+
+        let timeInterval = lastClickTime ? currentTime - lastClickTime : 0; // 计算间隔时间
+        output.innerHTML += `<p>右键点击 - X: ${event.clientX}, Y: ${event.clientY}, 间隔: ${timeInterval} 毫秒</p>`;
+        
+        lastClickTime = currentTime;
+        lastClickPosition = currentPosition;
+    });
+</script>
+
+</body>
+</html>
